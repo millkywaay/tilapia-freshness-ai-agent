@@ -6,7 +6,7 @@ import { ErrorState, LoadingState } from '../components/FeedbackState'
 import { ResultSummary } from '../components/PredictionResult'
 import { normalizePrediction } from '../utils/prediction'
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://127.0.0.1:8000'
+const API_URL = import.meta.env.VITE_API_URL || 'https://tilapia-48e6.onrender.com'
 
 function Detect() {
   const [eyeFile, setEyeFile] = useState(null)
