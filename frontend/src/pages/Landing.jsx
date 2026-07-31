@@ -1,103 +1,97 @@
-import { useEffect } from 'react'
+import { motion, useReducedMotion } from 'framer-motion'
 import { Link } from 'react-router-dom'
 
 const steps = [
-  { icon: '📸', title: 'Upload Gambar',     desc: 'Upload foto mata dan insang ikan Nila yang ingin dianalisis.' },
-  { icon: '🧠', title: 'Analisis AI',       desc: 'Model deep learning MobileNetV2 memproses gambar dari kedua organ secara terpisah.' },
-  { icon: '🔬', title: 'Ensemble Prediksi', desc: 'Hasil prediksi mata dan insang digabungkan untuk menghasilkan keputusan akhir.' },
-  { icon: '📋', title: 'Penjelasan',        desc: 'AI menjelaskan hasil analisis secara ilmiah dalam Bahasa Indonesia.' },
+  {
+    number: '01',
+    icon: 'camera',
+    title: 'Ambil dua citra',
+    description: 'Foto mata dan insang secara dekat, terang, dan fokus agar karakter visual keduanya terbaca jelas.',
+    detail: 'Dua organ · dua input',
+  },
+  {
+    number: '02',
+    icon: 'scan',
+    title: 'Analisis per organ',
+    description: 'Model khusus memeriksa mata dan insang secara terpisah, lengkap dengan label serta confidence masing-masing.',
+    detail: 'Model mata + model insang',
+  },
+  {
+    number: '03',
+    icon: 'merge',
+    title: 'Gabungkan hasil',
+    description: 'Kedua prediksi disatukan dengan aturan keputusan yang konsisten untuk menghasilkan kesimpulan akhir.',
+    detail: 'Ensemble · hasil akhir',
+  },
 ]
 
-function useScrollReveal() {
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      entries => entries.forEach(e => {
-        if (e.isIntersecting) {
-          e.target.classList.add('in')
-          observer.unobserve(e.target)
-        }
-      }),
-      { threshold: 0.12 }
-    )
-    document.querySelectorAll('.reveal').forEach(el => observer.observe(el))
-    return () => observer.disconnect()
-  }, [])
+function StepIcon({ name }) {
+  if (name === 'camera') {
+    return <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7.5A2.5 2.5 0 0 1 6.5 5h2l1.2-1.5h4.6L15.5 5h2A2.5 2.5 0 0 1 20 7.5v9a2.5 2.5 0 0 1-2.5 2.5h-11A2.5 2.5 0 0 1 4 16.5v-9Z"/><circle cx="12" cy="12" r="3.5"/></svg>
+  }
+  if (name === 'scan') {
+    return <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8V5a1 1 0 0 1 1-1h3M16 4h3a1 1 0 0 1 1 1v3M20 16v3a1 1 0 0 1-1 1h-3M8 20H5a1 1 0 0 1-1-1v-3M7 12h10M9 9.5h6M9 14.5h6"/></svg>
+  }
+  return <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="6" cy="6" r="2.5"/><circle cx="6" cy="18" r="2.5"/><circle cx="18" cy="12" r="2.5"/><path d="M8.5 6c5 0 4 6 7 6M8.5 18c5 0 4-6 7-6"/></svg>
+}
+
+const containerVariants = {
+  hidden: {},
+  visible: { transition: { staggerChildren: 0.14, delayChildren: 0.08 } },
+}
+
+const cardVariants = {
+  hidden: { opacity: 0, y: 28, scale: 0.98 },
+  visible: { opacity: 1, y: 0, scale: 1, transition: { type: 'spring', stiffness: 120, damping: 18 } },
 }
 
 function Landing() {
-  useScrollReveal()
+  const reduceMotion = useReducedMotion()
 
   return (
     <main>
-      {/* Hero */}
-      <section className="min-h-screen flex flex-col items-center justify-center text-center px-6 py-20">
-        <span className="page-in inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-teal-500/10 border border-teal-500/30 text-teal-300 text-[12px] font-semibold tracking-[0.05em] mb-7"
-              style={{ animationDelay: '0ms' }}>
-          🐟 &nbsp;NilaFresh · Deep Learning Classifier
-        </span>
-        <h1 className="page-in text-[clamp(38px,7vw,72px)] font-extrabold tracking-tight leading-[1.1] text-slate-100 mb-5"
-            style={{ animationDelay: '80ms' }}>
-          Deteksi Kesegaran<br />
-          <span className="text-teal-300">Ikan Nila</span> dengan AI
-        </h1>
-        <p className="page-in text-[17px] text-slate-500 max-w-[520px] leading-[1.7] mb-10"
-           style={{ animationDelay: '160ms' }}>
-          Sistem klasifikasi kesegaran ikan berbasis deep learning menggunakan
-          citra mata dan insang ikan Nila secara otomatis dan akurat.
-        </p>
-        <Link
-          to="/detect"
-          className="page-in inline-flex items-center gap-2.5 px-8 py-4 rounded-[14px] font-bold text-base no-underline transition-all hover:-translate-y-0.5"
-          style={{
-            animationDelay: '240ms',
-            background: 'linear-gradient(135deg, #14b8a6, #0d9488)',
-            color: '#052e2b',
-            boxShadow: '0 10px 30px rgba(20,184,166,0.4), inset 0 1px 0 rgba(255,255,255,0.2)',
-          }}
-        >
-          Mulai Deteksi Sekarang
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-            <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
-          </svg>
-        </Link>
-      </section>
-
-      {/* Cara Kerja */}
-      <section id="cara-kerja" className="py-24 px-6 border-y border-slate-400/10"
-               style={{ background: 'rgba(10,15,30,0.5)' }}>
-        <div className="reveal text-center mb-14">
-          <h2 className="text-[36px] font-bold text-slate-100 tracking-tight mb-3">Cara Kerja</h2>
-          <p className="text-[15px] text-slate-500">Empat langkah sederhana untuk mendeteksi kesegaran ikan Nila kamu.</p>
-        </div>
-        <div className="max-w-[1100px] mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          {steps.map((step, i) => (
-            <div key={i}
-                 className={`reveal reveal-d${i + 1} p-7 bg-white/[0.03] border border-slate-400/[0.18] rounded-[18px] transition-all duration-200 hover:bg-teal-500/[0.05] hover:border-teal-500/30 hover:-translate-y-[3px]`}>
-              <div className="w-[52px] h-[52px] rounded-[14px] bg-teal-500/[0.12] border border-teal-500/25 flex items-center justify-center text-[26px] mb-[18px]">
-                {step.icon}
-              </div>
-              <h3 className="text-[15px] font-bold text-slate-100 mb-2">{step.title}</h3>
-              <p className="text-[13px] text-slate-500 leading-relaxed">{step.desc}</p>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* About */}
-      <section id="about" className="py-24 px-6 text-center">
-        <div className="reveal max-w-[680px] mx-auto">
-          <h2 className="text-[36px] font-bold text-slate-100 tracking-tight mb-5">About</h2>
-          <p className="text-[15px] text-slate-500 leading-[1.8] mb-3.5">
-            NilaFresh adalah sistem klasifikasi kesegaran ikan Nila berbasis deep learning
-            yang dikembangkan sebagai bagian dari penelitian skripsi. Sistem ini menggunakan
-            dua model MobileNetV2 terpisah — satu untuk citra mata dan satu untuk citra insang —
-            yang digabungkan melalui ensemble probabilitas untuk menghasilkan prediksi akhir.
-          </p>
-          <div className="font-mono text-[12px] text-slate-600 px-[18px] py-2.5 rounded-lg bg-white/[0.04] border border-slate-400/10 inline-block">
-            TensorFlow · FastAPI · ReactJS · MobileNetV2
+      <section className="hero page-container">
+        <motion.div className="hero-copy" initial={reduceMotion ? false : { opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }}>
+          <span className="eyebrow">Klasifikasi visual ikan nila</span>
+          <h1>Nilai kesegaran ikan dengan bukti dari dua organ.</h1>
+          <p>NilaFresh menganalisis citra mata dan insang secara terpisah, lalu merangkum keduanya menjadi hasil yang mudah dipahami.</p>
+          <div className="hero-actions">
+            <Link to="/detect" className="button">Mulai deteksi</Link>
+            <a href="#cara-kerja" className="text-link">Pelajari cara kerja <span aria-hidden="true">→</span></a>
           </div>
+        </motion.div>
+        <motion.aside className="hero-panel" aria-label="Ringkasan proses NilaFresh" initial={reduceMotion ? false : { opacity: 0, x: 30 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.7, delay: 0.16, ease: [0.22, 1, 0.36, 1] }}>
+          <div className="panel-top"><span>Alur pemeriksaan</span><span className="live-dot">Siap digunakan</span></div>
+          <div className="organ-row"><span className="organ-index">A</span><div><strong>Citra mata</strong><span>Kejernihan dan karakter visual</span></div><span className="organ-status">Model 01</span></div>
+          <div className="organ-row"><span className="organ-index">B</span><div><strong>Citra insang</strong><span>Warna dan karakter visual</span></div><span className="organ-status">Model 02</span></div>
+          <div className="ensemble-row"><span>Hasil akhir</span><strong>Ensemble dua prediksi</strong></div>
+        </motion.aside>
+      </section>
+
+      <section id="cara-kerja" className="process-section">
+        <div className="page-container">
+          <motion.div className="section-heading" initial={reduceMotion ? false : { opacity: 0, y: 18 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: 0.5 }} transition={{ duration: 0.55 }}>
+            <span className="eyebrow">Cara kerja</span><h2>Proses singkat, hasil transparan.</h2><p>Setiap tahap dirancang agar hasil tiap organ tetap dapat dibaca, bukan hanya keputusan akhirnya.</p>
+          </motion.div>
+          <motion.div className="steps-grid" variants={reduceMotion ? undefined : containerVariants} initial={reduceMotion ? false : 'hidden'} whileInView={reduceMotion ? undefined : 'visible'} viewport={{ once: true, amount: 0.2 }}>
+            {steps.map((step) => (
+              <motion.article className="step-card" key={step.number} variants={reduceMotion ? undefined : cardVariants} whileHover={reduceMotion ? undefined : { y: -8 }} transition={{ type: 'spring', stiffness: 300, damping: 22 }}>
+                <div className="step-card-top"><span className="step-icon"><StepIcon name={step.icon} /></span><span className="step-number">{step.number}</span></div>
+                <h3>{step.title}</h3>
+                <p>{step.description}</p>
+                <div className="step-detail"><span>{step.detail}</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg></div>
+              </motion.article>
+            ))}
+          </motion.div>
         </div>
       </section>
+
+      <section id="tentang" className="about-section page-container">
+        <div><span className="eyebrow">Tentang penelitian</span><h2>Dibangun untuk pemeriksaan yang lebih terukur.</h2></div>
+        <div><p>NilaFresh dikembangkan sebagai bagian dari penelitian klasifikasi kesegaran ikan nila. Dua model citra khusus digunakan agar kondisi mata dan insang tidak tercampur dalam satu asumsi visual.</p><p className="tech-line">FastAPI · React · TensorFlow · ResNet50</p></div>
+      </section>
+
+      <footer className="site-footer"><div className="page-container"><span>NilaFresh</span><span>Sistem pendukung pemeriksaan kesegaran ikan nila.</span></div></footer>
     </main>
   )
 }

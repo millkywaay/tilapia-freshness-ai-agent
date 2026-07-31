@@ -32,6 +32,9 @@ dist-ssr
 Thumbs.db
 
 backend/.env
+backend/venv
 backend/model/
 __pycache__/
 *.pyc
+
+frontend/node_modules
