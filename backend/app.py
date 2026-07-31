@@ -19,7 +19,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from dotenv import load_dotenv
 from openai import OpenAI
-
+from fastapi.middleware.cors import CORSMiddleware
 
 # =========================================================
 # KONFIGURASI DASAR
@@ -109,11 +109,11 @@ app = FastAPI(
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=["*"], 
+    allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
 
 # =========================================================
 # STRUKTUR MODEL
