@@ -764,21 +764,19 @@ def get_deepseek_explanation(
 
     if label == "SEGAR":
         score_info = f"""
-- Status ikan: {status}
-- Skor kesegaran mata: {fresh_eye_percent:.2f}%
-- Skor kesegaran insang: {fresh_gill_percent:.2f}%
-- Skor kesegaran akhir: {fresh_final_percent:.2f}%
-- Keyakinan sistem: {confidence_percent:.2f}% ({confidence_level})
-- Dasar keputusan: kedua organ mendukung status segar
+- Status akhir: {status} (keyakinan {confidence_percent:.1f}% — {confidence_level})
+- Skor kesegaran mata: {fresh_eye_percent:.1f}%
+- Skor kesegaran insang: {fresh_gill_percent:.1f}%
+- Skor kesegaran gabungan: {fresh_final_percent:.1f}%
+- Kedua organ menunjukkan indikasi segar
 """
 
     elif label == "TIDAK SEGAR":
         score_info = f"""
-- Status ikan: {status}
-- Skor ketidaksegaran mata: {nonfresh_eye_percent:.2f}%
-- Skor ketidaksegaran insang: {nonfresh_gill_percent:.2f}%
-- Skor risiko akhir: {nonfresh_final_percent:.2f}%
-- Keyakinan sistem: {confidence_percent:.2f}% ({confidence_level})
+- Status akhir: {status} (keyakinan {confidence_percent:.1f}% — {confidence_level})
+- Skor ketidaksegaran mata: {nonfresh_eye_percent:.1f}%
+- Skor ketidaksegaran insang: {nonfresh_gill_percent:.1f}%
+- Skor risiko gabungan: {nonfresh_final_percent:.1f}%
 - Dasar keputusan: {decision_reason}
 """
 
@@ -794,26 +792,36 @@ def get_deepseek_explanation(
 """
 
     prompt = f"""
-Kamu adalah AI Fish Freshness Assistant yang menjelaskan hasil
-deteksi kesegaran ikan nila berdasarkan citra mata dan insang.
+Kamu adalah pakar mutu hasil perikanan. Jelaskan hasil pemeriksaan kesegaran ikan nila berdasarkan data analisis citra mata dan insang berikut. Sasaran pembaca: konsumen, pedagang, atau peneliti pangan.
 
-Informasi hasil deteksi:
+Data hasil pemeriksaan:
 {score_info}
 
-Instruksi:
-1. Gunakan Bahasa Indonesia yang formal, jelas, dan mudah dipahami.
-2. Jangan mengarang ciri visual yang tidak diberikan oleh sistem.
-3. Jelaskan hubungan hasil mata, insang, dan kesimpulan akhir.
-4. Berikan rekomendasi praktis dan aman.
-5. Gunakan tepat tiga paragraf pendek:
-Kondisi organ: ...
-Kesimpulan: ...
-Rekomendasi: ...
-6. Panjang keseluruhan 70-110 kata.
-7. Jangan memberikan jaminan keamanan pangan hanya dari citra.
-8. Jangan menyebut CNN, ResNet, probabilitas, dataset, atau machine learning.
-9. Jangan menggunakan pembuka seperti "Tentu", "Baik", atau "Berikut".
-10. Berikan hanya hasil analisis tanpa judul atau bullet.
+Tulis output dalam format POIN-POIN (bukan paragraf), dibagi tiga seksi dengan label persis seperti berikut:
+
+Kondisi organ:
+• [poin 1: kondisi mata berdasarkan skor, 1 kalimat ringkas]
+• [poin 2: kondisi insang berdasarkan skor, 1 kalimat ringkas]
+• [poin 3: perbandingan atau hubungan antara keduanya, 1 kalimat]
+
+Kesimpulan:
+• [poin 1: status akhir ikan dengan tegas, 1 kalimat]
+• [poin 2: organ atau faktor dominan yang menentukan keputusan, 1 kalimat]
+• [poin 3 opsional: catatan jika ada ketidakselarasan antar organ, 1 kalimat]
+
+Rekomendasi:
+• [poin 1: tindakan utama sesuai status (konsumsi / simpan / buang / distribusi), 1 kalimat]
+• [poin 2: panduan penanganan atau penyimpanan lanjutan, 1 kalimat]
+• [poin 3: pengingat bahwa hasil berbasis citra dan pemeriksaan fisik tetap diperlukan, 1 kalimat]
+
+Aturan ketat:
+- Setiap poin maksimal 20 kata, langsung ke inti
+- Bahasa Indonesia formal, mudah dipahami
+- Jangan mengarang ciri visual yang tidak ada dalam data
+- Jangan sebut CNN, ResNet, dataset, machine learning, atau neural network
+- Jangan gunakan pembuka seperti "Tentu", "Baik", atau "Berikut"
+- Jangan gunakan numbering (1., 2., dst.) — hanya bullet •
+- Pisahkan setiap seksi dengan baris kosong
 """
 
     response = deepseek_client.chat.completions.create(
@@ -824,8 +832,8 @@ Rekomendasi: ...
                 "content": prompt,
             }
         ],
-        temperature=0.3,
-        max_tokens=260,
+        temperature=0.25,
+        max_tokens=480,
     )
 
     return response.choices[0].message.content.strip()

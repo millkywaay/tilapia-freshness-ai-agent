@@ -203,7 +203,7 @@ function Landing() {
       <footer className="site-footer">
         <div className="page-container">
           <span>NilaFresh</span>
-          <span>Sistem pendukung pemeriksaan kesegaran ikan nila.</span>
+          <span>© 2026 Khoirunnisa · Sistem pendukung pemeriksaan kesegaran ikan nila.</span>
         </div>
       </footer>
     </main>

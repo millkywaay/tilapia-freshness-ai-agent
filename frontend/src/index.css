@@ -1044,54 +1044,142 @@ a { color: inherit; }
   50% { opacity: 1; transform: scale(1); }
 }
 
-.explanation-sections { padding: 8px 36px; }
-.explanation-section {
-  padding: 26px 0;
+/* ─── Interpretation Cards Grid ─────────────────────────────────── */
+.interp-grid {
   display: grid;
-  grid-template-columns: 44px 1fr;
-  gap: 16px;
-  border-bottom: 1px solid var(--border);
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  padding: 20px 28px 24px;
 }
-.explanation-section:last-child { border-bottom: 0; }
-.explanation-index {
-  padding-top: 2px;
+
+/* Base card */
+.interp-card {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 22px 20px;
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  background: var(--surface);
+  cursor: default;
+  transition: transform 200ms cubic-bezier(0.22, 1, 0.36, 1),
+              box-shadow 200ms cubic-bezier(0.22, 1, 0.36, 1),
+              border-color 200ms;
+}
+.interp-card:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-md);
+}
+
+/* Blue — Kondisi Organ */
+.interp-card--interp-blue {
+  border-top: 3px solid var(--accent);
+}
+.interp-card--interp-blue:hover {
+  border-color: var(--accent);
+  background: var(--accent-pale);
+}
+
+/* Green — Kesimpulan */
+.interp-card--interp-green {
+  border-top: 3px solid var(--fresh);
+}
+.interp-card--interp-green:hover {
+  border-color: color-mix(in srgb, var(--fresh) 40%, var(--border));
+  background: var(--fresh-soft);
+}
+
+/* Amber — Rekomendasi */
+.interp-card--interp-amber {
+  border-top: 3px solid var(--review);
+}
+.interp-card--interp-amber:hover {
+  border-color: color-mix(in srgb, var(--review) 40%, var(--border));
+  background: var(--review-soft);
+}
+
+/* Card header row */
+.interp-card-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Icon bubble */
+.interp-card-icon {
   width: 36px;
   height: 36px;
   display: grid;
   place-items: center;
   border-radius: 10px;
-  background: var(--accent-soft);
-  border: 1px solid var(--accent-mid);
-  color: var(--accent-ink);
-  font-size: 0.68rem;
-  font-weight: 800;
-  letter-spacing: 0.06em;
   flex-shrink: 0;
 }
-.explanation-section h4 {
-  margin: 0 0 10px;
-  color: var(--text);
-  font-size: 0.82rem;
-  font-weight: 700;
-  letter-spacing: 0.02em;
-  text-transform: uppercase;
+.interp-card-icon svg { width: 17px; }
+
+.interp-card--interp-blue .interp-card-icon {
+  background: var(--accent-soft);
+  color: var(--accent);
+  border: 1px solid var(--accent-mid);
 }
-.explanation-section p {
-  margin: 0;
-  color: var(--muted);
-  font-size: 0.9rem;
-  line-height: 1.75;
+.interp-card--interp-green .interp-card-icon {
+  background: var(--fresh-soft);
+  color: var(--fresh);
+  border: 1px solid color-mix(in srgb, var(--fresh) 20%, transparent);
+}
+.interp-card--interp-amber .interp-card-icon {
+  background: var(--review-soft);
+  color: var(--review);
+  border: 1px solid color-mix(in srgb, var(--review) 20%, transparent);
 }
 
-/* Recommendation section with slight blue tint */
-.explanation-section.recommendation-section {
-  margin-inline: -36px;
-  padding-inline: 36px;
-  background: var(--accent-pale);
+/* Card title */
+.interp-card-title {
+  margin: 0;
+  font-size: 0.78rem;
+  font-weight: 760;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text);
+}
+
+/* Bullet list */
+.interp-bullets {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.interp-bullet-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 9px;
+  font-size: 0.86rem;
+  color: var(--muted);
+  line-height: 1.65;
+}
+.interp-bullet-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  margin-top: 6px;
+}
+.interp-card--interp-blue .interp-bullet-dot { background: var(--accent); }
+.interp-card--interp-green .interp-bullet-dot { background: var(--fresh); }
+.interp-card--interp-amber .interp-bullet-dot { background: var(--review); }
+
+/* Fallback plain text */
+.interp-fallback-text {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.86rem;
+  line-height: 1.65;
 }
 
 .explanation-note {
-  padding: 18px 36px;
+  padding: 16px 28px;
   display: flex;
   align-items: flex-start;
   gap: 10px;
@@ -1128,6 +1216,7 @@ a { color: inherit; }
   .about-section > div:last-child { max-width: 680px; padding-top: 0; }
   .back-link { position: static; margin-bottom: 28px; }
   .image-preview { height: 340px; }
+  .interp-grid { grid-template-columns: 1fr; gap: 12px; padding: 16px 20px 20px; }
 }
 
 @media (max-width: 768px) {
@@ -1156,10 +1245,8 @@ a { color: inherit; }
   .final-confidence { width: 100%; padding: 18px 0 0; border-left: 0; border-top: 1px solid var(--border); text-align: left; }
   .reset-button { width: 100%; }
   .explanation-header { align-items: flex-start; flex-wrap: wrap; padding: 22px 24px 18px; }
-  .explanation-sections { padding-inline: 24px; }
-  .explanation-note { padding-inline: 24px; }
-  .explanation-section { grid-template-columns: 38px 1fr; }
-  .explanation-section.recommendation-section { margin-inline: -24px; padding-inline: 24px; }
+  .explanation-note { padding-inline: 20px; }
+  .interp-grid { grid-template-columns: 1fr; gap: 12px; padding: 16px 20px 20px; }
 }
 
 @media (max-width: 480px) {
@@ -1170,9 +1257,10 @@ a { color: inherit; }
   .result-summary { padding: 22px 20px; border-radius: 18px; }
   .status { max-width: 140px; text-align: right; }
   .explanation-header { flex-direction: column; }
-  .explanation-sections { padding-inline: 18px; }
-  .explanation-note { padding-inline: 18px; }
-  .explanation-section.recommendation-section { margin-inline: -18px; padding-inline: 18px; }
+  .explanation-note { padding-inline: 16px; }
+  .interp-card { padding: 18px 16px; }
+  .interp-card-title { font-size: 0.72rem; }
+  .interp-bullet-item { font-size: 0.82rem; }
   .prediction-card { padding: 20px; }
 }
 
