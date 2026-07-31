@@ -1,7 +1,13 @@
 import { useEffect, useId, useRef, useState } from 'react'
 
 function UploadIcon() {
-  return <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7.5A2.5 2.5 0 0 1 6.5 5h2l1-1.5h5L16 5h1.5A2.5 2.5 0 0 1 20 7.5v9a2.5 2.5 0 0 1-2.5 2.5h-11A2.5 2.5 0 0 1 4 16.5v-9Z"/><circle cx="12" cy="12" r="3.5"/></svg>
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+      <polyline points="17 8 12 3 7 8"/>
+      <line x1="12" y1="3" x2="12" y2="15"/>
+    </svg>
+  )
 }
 
 function ImagePreview({ file, label, onRemove }) {
@@ -27,7 +33,9 @@ function ImagePreview({ file, label, onRemove }) {
 
   return (
     <div className="image-preview">
-      {previewUrl ? <img src={previewUrl} alt={`Pratinjau ${label.toLowerCase()}`} /> : null}
+      {previewUrl
+        ? <img className="preview-image" src={previewUrl} alt={`Pratinjau ${label.toLowerCase()}`} />
+        : null}
       <div className="preview-meta">
         <span title={file.name}>{file.name}</span>
         <button type="button" onClick={onRemove}>Hapus</button>
@@ -36,7 +44,7 @@ function ImagePreview({ file, label, onRemove }) {
   )
 }
 
-function UploadCard({ label, description, file, onChange, onRemove }) {
+function UploadCard({ label, description, hint, file, onChange, onRemove }) {
   const inputId = useId()
   const inputRef = useRef(null)
   const [dragging, setDragging] = useState(false)
@@ -44,7 +52,6 @@ function UploadCard({ label, description, file, onChange, onRemove }) {
   const selectFile = (nextFile) => {
     const hasImageType = nextFile?.type?.startsWith('image/')
     const hasImageExtension = /\.(jpe?g|png|webp)$/i.test(nextFile?.name || '')
-
     if (hasImageType || hasImageExtension) onChange(nextFile)
   }
 
@@ -81,8 +88,18 @@ function UploadCard({ label, description, file, onChange, onRemove }) {
           <span className="upload-icon"><UploadIcon /></span>
           <strong>Pilih atau letakkan foto</strong>
           <span>{description}</span>
-          <span className="file-hint">JPG, PNG, atau WEBP</span>
+          <span className="file-hint">JPG · PNG · WEBP</span>
         </button>
+      )}
+
+      {hint && (
+        <p className="upload-hint">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <circle cx="12" cy="12" r="9"/>
+            <path d="M12 11v5M12 8h.01"/>
+          </svg>
+          {hint}
+        </p>
       )}
 
       <input

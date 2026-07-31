@@ -15,7 +15,7 @@ function ThemeToggle() {
     localStorage.setItem(STORAGE_KEY, theme)
     document.querySelector('meta[name="theme-color"]')?.setAttribute(
       'content',
-      theme === 'dark' ? '#0c1214' : '#f5f7f7',
+      theme === 'dark' ? '#0D1526' : '#F4F7FC',
     )
   }, [theme])
 
