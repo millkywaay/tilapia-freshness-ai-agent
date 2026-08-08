@@ -1,5 +1,6 @@
 import { motion, useReducedMotion } from 'framer-motion'
 import { Link } from 'react-router-dom'
+import ikanNilaImage from '../assets/ikanNila.svg'
 
 const steps = [
   {
@@ -88,55 +89,20 @@ function Landing() {
           </div>
         </motion.div>
 
-        {/* ── Workflow Card ── */}
-        <motion.aside
-          className="hero-panel"
-          aria-label="Ringkasan proses NilaFresh"
+        {/* ── Image ── */}
+        <motion.div
+          className="hero-image"
           initial={reduceMotion ? false : { opacity: 0, x: 30 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.7, delay: 0.16, ease: [0.22, 1, 0.36, 1] }}
+          style={{ width: '100%', display: 'flex', justifyContent: 'center' }}
         >
-          <div className="panel-top">
-            <span className="panel-title">Alur pemeriksaan</span>
-            <span className="live-dot">Siap digunakan</span>
-          </div>
-
-          {/* Organ A — Mata */}
-          <div className="organ-row">
-            <span className="organ-index">A</span>
-            <div>
-              <strong>Citra mata</strong>
-              <span>Kejernihan dan karakter visual</span>
-            </div>
-            <span className="organ-label-badge">Analisis mata</span>
-          </div>
-
-          {/* Organ B — Insang */}
-          <div className="organ-row">
-            <span className="organ-index">B</span>
-            <div>
-              <strong>Citra insang</strong>
-              <span>Warna dan karakter visual</span>
-            </div>
-            <span className="organ-label-badge">Analisis insang</span>
-          </div>
-
-          {/* Ensemble result */}
-          <div className="ensemble-row">
-            <div className="ensemble-row-left">
-              <span>Hasil akhir</span>
-              <strong>Ensemble dua prediksi</strong>
-            </div>
-            <div className="ensemble-icon" aria-hidden="true">
-              <svg viewBox="0 0 24 24">
-                <circle cx="6" cy="6" r="2.5"/>
-                <circle cx="6" cy="18" r="2.5"/>
-                <circle cx="18" cy="12" r="2.5"/>
-                <path d="M8.5 6c5 0 4 6 7 6M8.5 18c5 0 4-6 7-6"/>
-              </svg>
-            </div>
-          </div>
-        </motion.aside>
+          <img 
+            src={ikanNilaImage} 
+            alt="Ikan Nila" 
+            style={{ maxWidth: '100%', height: 'auto' }} 
+          />
+        </motion.div>
       </section>
 
       {/* ── Process / Steps ── */}
@@ -188,7 +154,7 @@ function Landing() {
       {/* ── About ── */}
       <section id="tentang" className="about-section page-container">
         <div>
-          <span className="eyebrow">Tentang penelitian</span>
+          <span className="eyebrow">Tentang Website</span>
           <h2>Dibangun untuk pemeriksaan yang lebih terukur.</h2>
         </div>
         <div>

@@ -1212,6 +1212,7 @@ a { color: inherit; }
   }
   .hero-copy { max-width: 700px; }
   .hero-panel { width: min(100%, 600px); }
+  .hero-image { display: none; }
   .about-section { grid-template-columns: 1fr; gap: 24px; }
   .about-section > div:last-child { max-width: 680px; padding-top: 0; }
   .back-link { position: static; margin-bottom: 28px; }

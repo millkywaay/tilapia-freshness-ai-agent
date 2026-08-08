@@ -466,9 +466,7 @@ def ensemble_organ(
 
     Penentuan kelas tidak menggunakan rata-rata probabilitas semata.
     """
-
     processed_image = preprocess_resnet(image_array)
-
     model_predictions = [
         predict_single_model(model, processed_image)
         for model in loaded_models
@@ -523,8 +521,6 @@ def ensemble_organ(
         )
         decision_method = "confidence_weighted_vote"
 
-    # Soft score hanya digunakan untuk tampilan persentase.
-    # Penentuan kelas tetap menggunakan voting di atas.
     reliability_total = sum(
         prediction["reliability"]
         for prediction in model_predictions
@@ -595,14 +591,12 @@ def combine_organ_predictions(
 
     Tidak menggunakan rata-rata probabilitas sebagai penentu kelas.
     """
-
     eye_class = eye_result["class_index"]
     gill_class = gill_result["class_index"]
 
     final_class: Optional[int]
     decision_reason: str
 
-    # Keduanya memberikan kelas yang sama.
     if (
         eye_class is not None
         and eye_class == gill_class
@@ -646,10 +640,6 @@ def combine_organ_predictions(
             ),
             default=0.0,
         )
-
-        # Veto konservatif:
-        # prediksi tidak segar harus sangat kuat dan lebih yakin
-        # daripada prediksi segar.
         if (
             strong_nonfresh is not None
             and strong_nonfresh["confidence"]
@@ -667,9 +657,6 @@ def combine_organ_predictions(
             final_class = None
             decision_reason = "organ_disagreement"
 
-    # Worst-organ risk score.
-    # Hanya dipakai sebagai informasi persentase,
-    # bukan satu-satunya penentu label.
     final_prob_nonfresh = max(
         eye_result["prob_nonfresh"],
         gill_result["prob_nonfresh"],
@@ -693,8 +680,6 @@ def combine_organ_predictions(
     elif final_class == 0:
         final_label = "SEGAR"
 
-        # Menggunakan confidence terendah agar kesimpulan
-        # segar tidak terlalu optimistis.
         final_confidence = min(
             eye_result["confidence"],
             gill_result["confidence"],
@@ -770,7 +755,6 @@ def get_deepseek_explanation(
 - Skor kesegaran gabungan: {fresh_final_percent:.1f}%
 - Kedua organ menunjukkan indikasi segar
 """
-
     elif label == "TIDAK SEGAR":
         score_info = f"""
 - Status akhir: {status} (keyakinan {confidence_percent:.1f}% — {confidence_level})
@@ -779,7 +763,6 @@ def get_deepseek_explanation(
 - Skor risiko gabungan: {nonfresh_final_percent:.1f}%
 - Dasar keputusan: {decision_reason}
 """
-
     else:
         score_info = f"""
 - Status ikan: {status}
