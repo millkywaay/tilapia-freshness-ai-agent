@@ -12,12 +12,14 @@ def predict_organ(
         image_array
     )
 
-    raw_prediction = loaded_model[
-        "model"
-    ].predict(
-        processed_image,
-        verbose=0,
-    )
+    interpreter = loaded_model["model"]
+    input_details = interpreter.get_input_details()
+    output_details = interpreter.get_output_details()
+    
+    interpreter.set_tensor(input_details[0]['index'], processed_image)
+    interpreter.invoke()
+    
+    raw_prediction = interpreter.get_tensor(output_details[0]['index'])
 
     prob_nonfresh = (
         extract_nonfresh_probability(

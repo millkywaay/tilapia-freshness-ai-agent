@@ -23,10 +23,10 @@ NONFRESH_VETO_CONFIDENCE = float(
 MODEL_FILES = {
     "eyes": os.getenv(
         "EYES_MODEL_FILE",
-        "best_model_eyes.keras",
+        "best_model_eyes.tflite",
     ),
     "gills": os.getenv(
         "GILLS_MODEL_FILE",
-        "best_model_gills.keras",
+        "best_model_gills.tflite",
     ),
 }

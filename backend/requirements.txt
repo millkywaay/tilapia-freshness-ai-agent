@@ -6,4 +6,4 @@ pillow
 python-multipart
 openai
 python-dotenv
-gdown
+

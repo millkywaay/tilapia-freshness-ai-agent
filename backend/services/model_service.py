@@ -105,22 +105,13 @@ def load_final_model(
         )
 
     logger.info(
-        "Memuat model final %s: %s",
+        "Memuat TFLite model %s: %s",
         organ,
         filename,
     )
 
-    model = (
-        tf.keras.models.load_model(
-            model_path,
-            compile=False,
-        )
-    )
-
-    validate_model_shape(
-        model,
-        organ,
-    )
+    interpreter = tf.lite.Interpreter(model_path=model_path)
+    interpreter.allocate_tensors()
 
     return {
         "organ": organ,
@@ -128,7 +119,7 @@ def load_final_model(
         "sha256": calculate_sha256(
             model_path
         ),
-        "model": model,
+        "model": interpreter,
     }
 
 
