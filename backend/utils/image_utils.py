@@ -1,7 +1,7 @@
 import io
 import numpy as np
 from PIL import Image, ImageOps, UnidentifiedImageError
-from tensorflow.keras.applications.resnet50 import preprocess_input as resnet_preprocess
+
 from config import IMAGE_SIZE, MAX_IMAGE_SIZE
 
 def decode_image(
@@ -78,9 +78,13 @@ def decode_image(
 def preprocess_resnet(
     image_array: np.ndarray,
 ) -> np.ndarray:
-    processed = resnet_preprocess(
-        image_array.copy()
-    )
+    
+    # 1. Reverse RGB to BGR
+    processed = image_array[..., ::-1].copy()
+    
+    # 2. Subtract ImageNet mean (Caffe style, no scaling)
+    mean = np.array([103.939, 116.779, 123.68], dtype=np.float32)
+    processed -= mean
 
     return np.expand_dims(
         processed,

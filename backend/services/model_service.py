@@ -1,7 +1,7 @@
 import os
 import hashlib
 import logging
-import tensorflow as tf
+import ai_edge_litert.interpreter as tflite
 from config import MODEL_DIR, MODEL_FILES, IMAGE_SIZE
 
 logger = logging.getLogger("nilafresh")
@@ -25,63 +25,7 @@ def calculate_sha256(
     return digest.hexdigest()
 
 
-def validate_model_shape(
-    model: tf.keras.Model,
-    model_name: str,
-) -> None:
 
-    input_shape = model.input_shape
-
-    if isinstance(
-        input_shape,
-        list,
-    ):
-        input_shape = input_shape[0]
-
-    if len(input_shape) != 4:
-        raise ValueError(
-            f"Input shape model "
-            f"{model_name} tidak valid: "
-            f"{input_shape}"
-        )
-
-    height = input_shape[1]
-    width = input_shape[2]
-    channels = input_shape[3]
-
-    if height not in (
-        None,
-        IMAGE_SIZE[1],
-    ):
-        logger.warning(
-            "%s menerima height %s, "
-            "deployment menggunakan %s.",
-            model_name,
-            height,
-            IMAGE_SIZE[1],
-        )
-
-    if width not in (
-        None,
-        IMAGE_SIZE[0],
-    ):
-        logger.warning(
-            "%s menerima width %s, "
-            "deployment menggunakan %s.",
-            model_name,
-            width,
-            IMAGE_SIZE[0],
-        )
-
-    if channels not in (
-        None,
-        3,
-    ):
-        raise ValueError(
-            f"Model {model_name} "
-            f"tidak menerima RGB: "
-            f"{input_shape}"
-        )
 
 
 def load_final_model(
@@ -110,7 +54,7 @@ def load_final_model(
         filename,
     )
 
-    interpreter = tf.lite.Interpreter(model_path=model_path)
+    interpreter = tflite.Interpreter(model_path=model_path)
     interpreter.allocate_tensors()
 
     return {
