@@ -1,5 +1,5 @@
 import logging
-import tensorflow as tf
+
 
 from fastapi import FastAPI, File, HTTPException, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
@@ -154,7 +154,7 @@ async def predict(
         OSError,
         ValueError,
         IndexError,
-        tf.errors.OpError,
+        Exception,
     ) as exc:
 
         logger.exception(
