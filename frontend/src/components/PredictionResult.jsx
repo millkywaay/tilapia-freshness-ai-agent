@@ -128,10 +128,15 @@ export function AIExplanationCard({ explanation }) {
 
   for (const line of lines) {
     if (!line) continue
-    // Detect section headers: "Kondisi organ:", "Kesimpulan:", "Rekomendasi:"
-    const headerMatch = line.match(/^\*{0,2}(Kondisi organ|Kesimpulan|Rekomendasi)\s*:?\*{0,2}\s*(.*)$/i)
+    // Detect section headers (supports both old and new formats from prompt)
+    const headerMatch = line.match(/^\*{0,2}(Kondisi organ|Analisis Organ|Kesimpulan Akhir|Kesimpulan|Rekomendasi Penanganan|Rekomendasi)\s*:?\*{0,2}\s*(.*)$/i)
     if (headerMatch) {
-      currentKey = headerMatch[1].toLowerCase()
+      let rawKey = headerMatch[1].toLowerCase()
+      if (rawKey === 'analisis organ') currentKey = 'kondisi organ'
+      else if (rawKey === 'kesimpulan akhir') currentKey = 'kesimpulan'
+      else if (rawKey === 'rekomendasi penanganan') currentKey = 'rekomendasi'
+      else currentKey = rawKey
+
       if (!sectionMap[currentKey]) sectionMap[currentKey] = []
       if (headerMatch[2].trim()) sectionMap[currentKey].push(headerMatch[2].trim())
     } else if (currentKey) {

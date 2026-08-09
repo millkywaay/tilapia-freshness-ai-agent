@@ -34,7 +34,7 @@ Thumbs.db
 backend/.env
 backend/venv
 # Ignore large model files (>100MB) due to GitHub limits
-backend/model/*resnet50*.keras
+*.keras
 __pycache__/
 *.pyc
 
